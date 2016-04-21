@@ -19,13 +19,13 @@ class CreateProfilesTable extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->string('display_name');
+            $table->string('profile_picture_url');
             $table->string('skills');
-            $table->string('email');
+            $table->string('email');            
             $table->string('home_page');
             $table->string('address');
             $table->string('phone_number_1');
             $table->string('phone_number_2');
-            $table->string('asd');
             $table->string('aboutme');
             $table->timestamps();
         });

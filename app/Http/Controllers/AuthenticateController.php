@@ -13,11 +13,14 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 use App\User;
 use App\Profile;
 use Validator;
+use App\Realtime\Events as SocketClient;
 
 
 
 class AuthenticateController extends Controller
 {
+  public $socketClient;
+
   public function __construct()
    {
        // Apply the jwt.auth middleware to all methods in this controller
@@ -25,6 +28,7 @@ class AuthenticateController extends Controller
        // the user from retrieving their token if they don't already have it
       //  $this->middleware('jwt.auth', ['only' => ['index', 'teste']]);
        $this->middleware('jwt.auth', ['only' => ['index', 'teste']]);
+       $this->socketClient = new SocketClient;
    }
 
   public function index()
@@ -47,6 +51,8 @@ class AuthenticateController extends Controller
  public function authenticate(Request $request)
  {
      $credentials = $request->only('email', 'password');
+     $this->socketClient->test();
+
      sleep(5);
 
      try {

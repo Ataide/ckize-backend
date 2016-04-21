@@ -28,10 +28,37 @@ class User extends Authenticatable
     {
         return $this->hasMany('\App\Post');
     }
+
     public function profile()
     {
       return $this->hasOne('\App\Profile');
     }
+
+    public function friendRequests()
+  	{
+  		return $this->hasMany('\App\FriendRequest');
+  	}
+
+    public function friends()
+  	{
+  		return $this->belongsToMany(Self::class, 'friends', 'requested_id', 'requester_id')->withTimestamps();
+  	}
+
+  	public function createFriendShipWith($requesterUserId)
+  	{
+  		return $this->friends()->attach($requesterUserId, ['requested_id' => $this->id, 'requester_id' => $requesterUserId]);
+  	}  	
+
+  	public function finishFriendshipWith($requesterUserId)
+  	{
+  		return $this->friends()->detach($requesterUserId, ['requested_id' => $this->id, 'requester_id' => $requesterUserId]);
+  	}
+
+
+
+
+
+
 
     public function allUsers()
     {
@@ -43,4 +70,6 @@ class User extends Authenticatable
         $user = self::find($id);
         return $user;
     }
+
+
 }

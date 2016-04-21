@@ -16,14 +16,21 @@ Route::get('/', function () {
   return 'Estamos pra Uso!!!:)';
 });
 
+
 Route::get('/users', function(){
-  $users = \App\User::find(2);
+  $users = \App\User::find(1);
   return $users;
 
 });
 
-
 Route::group(['prefix' => 'api' , 'middleware' => 'cors'], function(){
+
+  Route::post('/teste', function(Request $request){
+    $socketClient = new \App\Realtime\Events;
+    $socketClient->test();
+    return Request::input('message');
+  });
+
 
   Route::resource('authenticate', 'AuthenticateController', ['only' => ['index']]);
 
@@ -43,14 +50,32 @@ Route::group(['prefix' => 'api' , 'middleware' => 'cors'], function(){
       Route::post('profile/update_picture', 'ProfileController@updateUserPicture');
     });
 
-    //Prefix /posts
-    Route::group(['prefix' => 'posts'], function(){
 
-      Route::get('' , 'PostController@getAllPosts');
+       /**
+       * Posts
+       **/
 
-      Route::post('', 'PostController@newPosts');
+        Route::get('posts' , 'PostController@index');
+        Route::post('posts', 'PostController@store');
 
-    });
+       /**
+       * FriendRequest
+       */
+
+       Route::get('/friend-requests', 'FriendRequestController@index');
+       Route::post('/friend-requests', 'FriendRequestController@store');
+       Route::delete('/friend-requests', 'FriendRequestController@destroy');
+
+       /**
+       * Friends
+       */
+       Route::get('/friends', 'FriendController@index');
+       Route::post('/friends', 'FriendController@store');
+       Route::delete('/friends', 'FriendController@destroy');
+
+
+
+
 
 
     Route::get('/restricted', [
