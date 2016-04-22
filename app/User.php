@@ -44,10 +44,10 @@ class User extends Authenticatable
   		return $this->belongsToMany(Self::class, 'friends', 'requested_id', 'requester_id')->withTimestamps();
   	}
 
-  	public function createFriendShipWith($requesterUserId)
+  	public function createFriendshipWith($requesterUserId)
   	{
   		return $this->friends()->attach($requesterUserId, ['requested_id' => $this->id, 'requester_id' => $requesterUserId]);
-  	}  	
+  	}
 
   	public function finishFriendshipWith($requesterUserId)
   	{

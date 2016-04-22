@@ -27,7 +27,7 @@ class FriendController extends Controller
         $user = $this->currentUser;
         $friends = $repository->findByIdWithFriends($user->id);
         return $friends;
-    }    
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -45,9 +45,9 @@ class FriendController extends Controller
       }
       else
       {
-        $this->currentUser->createFriendShipWith($request->userId);
+        $this->currentUser->createFriendshipWith($request->userId);
 
-        $repository->findById($request->userId)->createFriendShipWith($this->currentUser->id);
+        $repository->findById($request->userId)->createFriendshipWith($this->currentUser->id);
 
         FriendRequest::where('user_id', $this->currentUser->id)->where('requester_id', $request->userId)->delete();
 

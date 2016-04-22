@@ -64,7 +64,7 @@ Route::group(['prefix' => 'api' , 'middleware' => 'cors'], function(){
 
        Route::get('/friend-requests', 'FriendRequestController@index');
        Route::post('/friend-requests', 'FriendRequestController@store');
-       Route::delete('/friend-requests', 'FriendRequestController@destroy');
+       Route::delete('/friend-requests/{userId}', 'FriendRequestController@destroy');
 
        /**
        * Friends

@@ -112,22 +112,13 @@ class FriendRequestController extends Controller
      * @param  Request $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request)
+    public function destroy($userId)
     {
-      $validator = Validator::make($request->all(), ['userId' => 'required']);
-
-      if($validator->fails())
-      {
-        return response()->json(['response' => 'failed', 'message' => 'Something went wrong please try again.']);
-      }
-      else
-      {
-        FriendRequest::where('user_id', $this->currentUser->id)->where('requester_id', $request->userId)->delete();
+        FriendRequest::where('user_id', $this->currentUser->id)->where('requester_id', $userId)->delete();
 
         $friendRequestCount = $this->currentUser->friendRequests()->count();
 
         return response()->json(['response' => 'success', 'count' => $friendRequestCount, 'message' => 'friend request removed']);
-      }
 
     }
 }
