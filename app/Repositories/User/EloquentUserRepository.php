@@ -91,7 +91,7 @@ class EloquentUserRepository implements UserRepository
 	{
 		$user = User::with([
 			'friends' => function($query){
-			$query->orderBy('firstname', 'desc');
+			$query->orderBy('name', 'desc');
 		}])->findOrFail($userId)->toArray();
 
 		return $user['friends'];

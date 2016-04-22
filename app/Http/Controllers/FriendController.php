@@ -3,30 +3,31 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use JWTAuth;
+use App\Repositories\User\UserRepository;
+use Validator;
 use App\Http\Requests;
+use App\FriendRequest;
 
 class FriendController extends Controller
 {
+
+    public function __construct(){
+      $this->middleware('jwt.auth');
+      $token = JWTAuth::getToken();
+      $this->currentUser = JWTAuth::toUser($token);
+    }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(UserRepository $repository)
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+        $user = $this->currentUser;
+        $friends = $repository->findByIdWithFriends($user->id);
+        return $friends;
+    }    
 
     /**
      * Store a newly created resource in storage.
@@ -34,43 +35,27 @@ class FriendController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, UserRepository $repository)
     {
-        //
-    }
+      $validator = Validator::make($request->all(), ['userId' => 'required']);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+      if($validator->fails())
+      {
+        return response()->json(['response' => 'failed', 'message' => 'Something went wrong please try again.']);
+      }
+      else
+      {
+        $this->currentUser->createFriendShipWith($request->userId);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+        $repository->findById($request->userId)->createFriendShipWith($this->currentUser->id);
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
+        FriendRequest::where('user_id', $this->currentUser->id)->where('requester_id', $request->userId)->delete();
+
+        $friendRequestCount = $this->currentUser->friendRequests()->count();
+
+        return response()->json(['response' => 'success', 'count' => $friendRequestCount, 'message' => 'Friend request accepted.']);
+      }
+
     }
 
     /**
@@ -79,8 +64,23 @@ class FriendController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, UserRepository $userRepository)
     {
-        //
+        $validator = Validator::make($request->all(), ['userId' => 'required']);
+
+        if($validator->fails()){
+
+          return response()->json(['response' => 'failed' , 'message' => 'Something went wrong please try again']);
+
+        }else {
+
+          $otherUser = $userRepository->findById($request->userId);
+
+          $this->currentUser->finishFriendshipWith($request->userId);
+          $otherUser->finishFriendshipWith($this->currentUser->id);
+
+          return response()->json(['response' => 'success' , 'message' => 'Done.']);
+
+        }
     }
 }
