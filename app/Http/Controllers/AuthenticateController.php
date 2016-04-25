@@ -53,7 +53,7 @@ class AuthenticateController extends Controller
      $credentials = $request->only('email', 'password');
      $this->socketClient->test();
 
-     sleep(5);
+    //  sleep(5);
 
      try {
          // verify the credentials and create a token for the user

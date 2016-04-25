@@ -13,4 +13,9 @@ class Post extends Model
       return $this->belongsTo('\App\User');
     }
 
+    public static function getTotalCountFeedsForUser($userIds)
+  	{
+  		return self::whereIn('user_id', $userIds)->count();
+  	}
+
 }

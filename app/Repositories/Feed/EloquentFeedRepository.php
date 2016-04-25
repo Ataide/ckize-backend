@@ -2,6 +2,7 @@
 
 use App\User;
 use App\Feed;
+use App\Post;
 
 class EloquentFeedRepository implements FeedRepository
 {
@@ -18,7 +19,7 @@ class EloquentFeedRepository implements FeedRepository
 
 		$friendsUserIds[] = $user->id;
 
-		return Feed::whereIn('user_id', $friendsUserIds)->latest()->take(10)->get();
+		return Post::whereIn('user_id', $friendsUserIds)->latest()->take(10)->get();
 
 	}
 
@@ -46,5 +47,5 @@ class EloquentFeedRepository implements FeedRepository
 
 		return Feed::whereIn('user_id', $friendsUserIds)->latest()->skip($skipQty)->take(10)->get();
 	}
-		
+
 }

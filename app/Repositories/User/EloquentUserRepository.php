@@ -30,7 +30,7 @@ class EloquentUserRepository implements UserRepository
 
 		foreach ($ids as $id) {
 
-			$users[] = User::find($id);
+			$users[] = User::find($id)->with('profile')->where(['id'=>$id])->first();
 		}
 
 		return	$users;

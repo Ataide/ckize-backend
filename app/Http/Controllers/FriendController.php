@@ -64,23 +64,15 @@ class FriendController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, UserRepository $userRepository)
+    public function destroy($userId, UserRepository $userRepository)
     {
-        $validator = Validator::make($request->all(), ['userId' => 'required']);
+          $otherUser = $userRepository->findById($userId);
 
-        if($validator->fails()){
-
-          return response()->json(['response' => 'failed' , 'message' => 'Something went wrong please try again']);
-
-        }else {
-
-          $otherUser = $userRepository->findById($request->userId);
-
-          $this->currentUser->finishFriendshipWith($request->userId);
+          $this->currentUser->finishFriendshipWith($userId);
           $otherUser->finishFriendshipWith($this->currentUser->id);
 
           return response()->json(['response' => 'success' , 'message' => 'Done.']);
 
-        }
+
     }
 }
