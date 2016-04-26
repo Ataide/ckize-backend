@@ -33,67 +33,60 @@ Route::group(['prefix' => 'api' , 'middleware' => 'cors'], function(){
 
 
   Route::resource('authenticate', 'AuthenticateController', ['only' => ['index']]);
-
   Route::post('authenticate' , 'AuthenticateController@authenticate');
-
   Route::get('token', 'AuthenticateController@token');
-
   Route::post('register' , 'AuthenticateController@register');
 
-    //Prefix /user
-    Route::group(['prefix' => 'user'], function(){
+  //Prefix /user
+  Route::group(['prefix' => 'user'], function(){
+    Route::get('profile','ProfileController@getUserProfile');
+    Route::put('profile', 'ProfileController@updateUserProfile');
+    Route::post('profile/update_picture', 'ProfileController@updateUserPicture');
+  });
+    /**
+    * Posts
+    **/
+  Route::get('users', 'UserController@index');
 
-      Route::get('profile','ProfileController@getUserProfile');
 
-      Route::put('profile', 'ProfileController@updateUserProfile');
+   /**
+   * Posts
+   **/
+  Route::get('posts' , 'PostController@index');
+  Route::post('posts', 'PostController@store');
 
-      Route::post('profile/update_picture', 'ProfileController@updateUserPicture');
-    });
+   /**
+   * FriendRequest
+   */
+  Route::get('/friend-requests', 'FriendRequestController@index');
+  Route::post('/friend-requests', 'FriendRequestController@store');
+  Route::delete('/friend-requests/{userId}', 'FriendRequestController@destroy');
 
-
-       /**
-       * Posts
-       **/
-
-        Route::get('posts' , 'PostController@index');
-        Route::post('posts', 'PostController@store');
-
-       /**
-       * FriendRequest
-       */
-
-       Route::get('/friend-requests', 'FriendRequestController@index');
-       Route::post('/friend-requests', 'FriendRequestController@store');
-       Route::delete('/friend-requests/{userId}', 'FriendRequestController@destroy');
-
-       /**
-       * Friends
-       */
-       Route::get('/friends', 'FriendController@index');
-       Route::post('/friends', 'FriendController@store');
-       Route::delete('/friends/{userId}', 'FriendController@destroy');
-
+  /**
+  * Friends
+  */
+  Route::get('/friends', 'FriendController@index');
+  Route::post('/friends', 'FriendController@store');
+  Route::delete('/friends/{userId}', 'FriendController@destroy');
 
 
 
 
 
-    Route::get('/restricted', [
-     'before' => 'jwt-auth',
-     function () {
-         $token = JWTAuth::getToken();
-         $user = JWTAuth::toUser($token);
 
-         return Response::json([
-             'data' => [
-                 'email' => $user->email,
-                 'registered_at' => $user->created_at->toDateTimeString()
-             ]
-         ]);
-     }
+  Route::get('/restricted', ['before' => 'jwt-auth',function () {
+       $token = JWTAuth::getToken();
+       $user = JWTAuth::toUser($token);
+
+       return Response::json(['data' => [
+               'email' => $user->email,
+               'registered_at' => $user->created_at->toDateTimeString()
+           ]
+       ]);
+  }
   ]);
 
-});
+  });
 
 
 

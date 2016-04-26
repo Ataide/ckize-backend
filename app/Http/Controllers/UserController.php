@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Illuminate\Http\Request;
+use App\Repositories\User\UserRepository;
 
 use App\Http\Requests;
 use Illuminate\Support\Facades\Response;
@@ -15,6 +16,10 @@ class UserController extends Controller
     public function __construct(User $user)
     {
         $this->user = $user;
+    }
+
+    public function index(UserRepository $userRepository){
+      return $userRepository->findAllUsers();
     }
 
 

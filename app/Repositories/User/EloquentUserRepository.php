@@ -6,6 +6,17 @@ class EloquentUserRepository implements UserRepository
 {
 
 	/**
+	 * Fetch all Ckize users
+	 *
+	 *
+	 * @return mixed
+	 */
+	public function findAllUsers()
+	{
+		return User::with(['profile'])->get();
+	}
+
+	/**
 	 * Fetch a user by id
 	 *
 	 * @param int $id
@@ -91,7 +102,7 @@ class EloquentUserRepository implements UserRepository
 	{
 		$user = User::with([
 			'friends' => function($query){
-			$query->orderBy('name', 'desc');
+			$query->with(['profile'])->orderBy('name', 'desc');
 		}])->findOrFail($userId)->toArray();
 
 		return $user['friends'];

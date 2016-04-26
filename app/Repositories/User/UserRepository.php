@@ -4,6 +4,7 @@ use App\User;
 
 interface UserRepository
 {
+	public function findAllUsers();
 	public function findById($id);
 	public function findManyById(array $ids);
 	public function findByIdWithFeeds($id);
