@@ -17,11 +17,7 @@ Route::get('/', function () {
 });
 
 
-Route::get('/users', function(){
-  $users = \App\User::find(1);
-  return $users;
-
-});
+Route::post('/test', 'TestController@store');
 
 Route::group(['prefix' => 'api' , 'middleware' => 'cors'], function(){
 

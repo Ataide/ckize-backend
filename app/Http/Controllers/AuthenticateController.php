@@ -8,6 +8,7 @@ use App\Http\Requests;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Artisan;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use App\User;
@@ -51,9 +52,7 @@ class AuthenticateController extends Controller
  public function authenticate(Request $request)
  {
      $credentials = $request->only('email', 'password');
-     $this->socketClient->test();
-
-    //  sleep(5);
+     //  sleep(5);
 
      try {
          // verify the credentials and create a token for the user
@@ -64,6 +63,8 @@ class AuthenticateController extends Controller
          // something went wrong
          return response()->json(['error' => 'could_not_create_token'], 500);
      }
+
+     Artisan::call('notify:login', ['token' => $token]);
 
      // if no errors are encountered we can return a JWT
      return response()->json(compact('token'));
