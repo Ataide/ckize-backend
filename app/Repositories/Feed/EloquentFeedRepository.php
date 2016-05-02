@@ -29,6 +29,16 @@ class EloquentFeedRepository implements FeedRepository
 
 	}
 
+	public function updateNameInPosts(User $user){
+		$posts = $user->posts()->get();
+		foreach ($posts as $post) {
+			$post->poster_firstname = $user->name;
+			$post->save();
+		}
+		return true;
+
+	}
+
 
 	/**
 	 * Get feeds posted by current user and friends via ajax.

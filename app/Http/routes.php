@@ -39,6 +39,10 @@ Route::group(['prefix' => 'api' , 'middleware' => 'cors'], function(){
     Route::put('profile', 'ProfileController@updateUserProfile');
     Route::post('profile/update_picture', 'ProfileController@updateUserPicture');
   });
+
+
+  Route::get('profile', 'ProfileController@index');
+  Route::get('profile/{id}', 'ProfileController@show');
     /**
     * Posts
     **/
@@ -70,19 +74,11 @@ Route::group(['prefix' => 'api' , 'middleware' => 'cors'], function(){
 
 
 
-  Route::get('/restricted', ['before' => 'jwt-auth',function () {
-       $token = JWTAuth::getToken();
-       $user = JWTAuth::toUser($token);
 
-       return Response::json(['data' => [
-               'email' => $user->email,
-               'registered_at' => $user->created_at->toDateTimeString()
-           ]
-       ]);
-  }
-  ]);
 
-  });
+
+
+});
 
 
 
