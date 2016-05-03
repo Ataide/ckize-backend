@@ -20,8 +20,22 @@ class Events extends Realtime
 		$this->broadcastToAll($userIds, $clientCode, $relatedToId, $message);
 	}
 
-	public function test(){
-		$this->broadcastTo(1, 21, 1, 'message');
+	/**
+	 * Notify a new post of current user to her friends.
+	 *
+	 * @param array $userIds
+	 *
+	 * @param int $clientCode
+	 *
+	 * @param int $relatedToId
+	 *
+	 * @param string $message
+	 * return void
+	 *
+	 */
+
+	public function notifyNewPost($userIds = [], $clientCode = "", $relatedToId = "", $message = ""){
+		$this->broadcastToAll($userIds, $clientCode, $relatedToId, $message);
 	}
 
 	/**

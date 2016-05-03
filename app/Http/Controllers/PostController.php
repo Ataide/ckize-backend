@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use App\Repositories\Feed\FeedRepository;
+use Illuminate\Support\Facades\Artisan;
 use JWTAuth;
 use \App\Post as Post;
 
@@ -16,8 +17,8 @@ class PostController extends Controller
 
   public function __construct(){
     $this->middleware('jwt.auth');
-    $token = JWTAuth::getToken();
-    $this->currentUser = JWTAuth::toUser($token);
+    $this->token = JWTAuth::getToken();
+    $this->currentUser = JWTAuth::toUser($this->token);
   }
 
   public function index(FeedRepository $feedRepository){
@@ -31,13 +32,13 @@ class PostController extends Controller
 
   public function store(Request $request){
     $user = $this->currentUser;
-
     $post = new Post();
     $post->body = $request->input('body');
     $post->poster_firstname = $request->input('poster_firstname');
     $post->poster_profile_image = $user->profile()->first()->profile_picture_url;
-
     $user->posts()->save($post);
+    
+    Artisan::call('notify:post', ['token' => $this->token]);
 
     return 'true';
 

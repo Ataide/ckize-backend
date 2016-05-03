@@ -2,26 +2,26 @@
 
 namespace App\Console\Commands;
 
+use Illuminate\Console\Command;
 use App\Realtime\Events as SocketClient;
 use App\User;
-use Illuminate\Console\Command;
 use JWTAuth;
 
-class LoginUserNotify extends Command
+class PostNotify extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'notify:login {token}';
+    protected $signature = 'notify:post {token}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Notify Login for all friends related User';
+    protected $description = 'Notify a new post for all friends related User';
 
     protected $token;
 
@@ -32,8 +32,8 @@ class LoginUserNotify extends Command
      */
     public function __construct()
     {
-      parent::__construct();
-      $this->socketClient = new SocketClient;
+        parent::__construct();
+        $this->socketClient = new SocketClient();
     }
 
     /**
@@ -44,12 +44,11 @@ class LoginUserNotify extends Command
     public function handle()
     {
       $user = JWTAuth::toUser($this->argument('token'));
-      $friendsUserIds = $user->friends()->where('online_status', 1)->lists('requester_id');
+      $friendsUserIds = $user->friends()->where('online_status',1)->lists('requester_id');      
       $relatedToId = $user->id;
-      $clientCode = 22;
-      $message = $user->name.' acabou de entrar.';
-      $this->socketClient->updateChatStatusBar($friendsUserIds, $clientCode, $relatedToId, $message);
-      $user->online_status = 1;
-      $user->save();
+      $clientCode = 41;
+      $message = $user->name." escreveu um novo post.";
+      $this->socketClient->notifyNewPost($friendsUserIds,$clientCode,$relatedToId,$message);
+
     }
 }

@@ -16,7 +16,7 @@ abstract class Realtime
 	 */
 	public function __construct()
 	{
-		$this->socketClient = new Client(new Version1X('http://localhost:7000'));
+		$this->socketClient = new Client(new Version1X('http://localhost:3000'));
 	}
 
 	public function toDispara($message){
