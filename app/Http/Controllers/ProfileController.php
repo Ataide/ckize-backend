@@ -57,8 +57,8 @@ class ProfileController extends Controller
     }
 
     public function updateUserProfile(Request $request) {
-      $profile = Profile::find($request['id']);
-      $user = User::find($request['id']);
+      $user = User::find($this->currentUser->id);
+      $profile = $user->profile()->firstOrFail();
       $user->name = Input::get('first_name').' '.Input::get('last_name');
       $profile->display_name = Input::get('first_name').' '.Input::get('last_name');
       $profile->address = $request->input('address');
@@ -68,8 +68,8 @@ class ProfileController extends Controller
       $profile->home_page = Input::get('home_page');
       $profile->aboutme = Input::get('aboutme');
 
-      $profile->save();
       $user->save();
+      $profile->save();
 
       $posts = $user->posts()->get();
   		foreach ($posts as $post) {
