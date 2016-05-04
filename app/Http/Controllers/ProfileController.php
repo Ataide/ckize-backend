@@ -61,7 +61,7 @@ class ProfileController extends Controller
       $profile = $user->profile()->firstOrFail();
       $user->name = Input::get('first_name').' '.Input::get('last_name');
       $profile->display_name = Input::get('first_name').' '.Input::get('last_name');
-      $profile->address = $request->input('address');
+      $profile->address = $request->input('city').' - '.$request->input('state');
       $profile->first_name = Input::get('first_name');
       $profile->last_name = Input::get('last_name');
       $profile->skills = Input::get('skills');
@@ -82,16 +82,31 @@ class ProfileController extends Controller
 
     public function updateUserPicture(Request $request) {
 
-      // if($file->isValid()){
-      //   $destinationPath = 'uploads';
-      //   $extension = $request->file('image')->getClientOriginalExtension();
-      //   $fileName = rand(11111,99999).'.'.$extension;
-      //   $request->file('image')->move($destinationPath, $fileName);
-      //   return Response::json(['msg' => 'File uploaded.']);
-      // }else{
-      //   return Response::json(['msg' => 'File not uploaded.']);
-      // }
-      return Response::json(Input::file('file'));
+      $file = Input::file('file');
+
+      if($file->isValid()){
+          $destinationPath = 'uploads';
+          $extension = $request->file('file')->getClientOriginalExtension();
+          $fileName = $this->currentUser->id.'.'.$extension;
+          $request->file('file')->move($destinationPath, $fileName);
+
+          $profile = $this->currentUser->profile()->firstOrFail();
+
+          $profile->profile_picture_url = env('APP_UPLOAD_FOLDER', '').$fileName;
+          $this->currentUser->picture_url = env('APP_UPLOAD_FOLDER', '').$fileName;
+          $this->currentUser->save();
+          $profile->save();
+
+          $posts = $this->currentUser->posts()->get();
+      		foreach ($posts as $post) {
+      			$post->poster_profile_image = env('APP_UPLOAD_FOLDER', '').$fileName;
+      			$post->save();
+      		}
+
+        return Response::json(['msg' => 'File uploaded.']);
+      }else{
+        return Response::json(['msg' => 'File not uploaded.']);
+      }
 
     }
 }
