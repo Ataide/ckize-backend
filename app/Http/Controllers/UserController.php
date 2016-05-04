@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\User;
 use Illuminate\Http\Request;
 use App\Repositories\User\UserRepository;
-
+use JWTAuth;
 use App\Http\Requests;
 use Illuminate\Support\Facades\Response;
 
@@ -15,11 +15,13 @@ class UserController extends Controller
 
     public function __construct(User $user)
     {
-        $this->user = $user;
+      $this->middleware('jwt.auth');
+      $token = JWTAuth::getToken();
+      $this->currentUser = JWTAuth::toUser($token);
     }
 
     public function index(UserRepository $userRepository){
-      return $userRepository->findAllUsers($this->user->id);
+      return $userRepository->findAllUsers($this->currentUser->id);
     }
 
 
