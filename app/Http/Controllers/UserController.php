@@ -8,6 +8,7 @@ use App\Repositories\User\UserRepository;
 use JWTAuth;
 use App\Http\Requests;
 use Illuminate\Support\Facades\Response;
+use DB;
 
 class UserController extends Controller
 {
