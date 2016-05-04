@@ -75,6 +75,7 @@ class AuthenticateController extends Controller
 
    $validator = Validator::make($request->all(),[
      'displayName' => 'required',
+     'last_name' => 'required',
      'email' => 'required|unique:users',
      'password' => 'required',
    ]);
@@ -85,13 +86,15 @@ class AuthenticateController extends Controller
    }
 
    $user = new User();
-   $user->name = $request->input('displayName');
+   $user->name = $request->input('displayName').' '.$request->input('last_name');
    $user->email = $request->input('email');
    $user->password = Hash::make($request->input('password'));
    $user->save();
 
    $profile = new Profile();
    $profile->display_name = $request->input('displayName');
+   $profile->first_name = $request->input('displayName');
+   $profile->last_name = $request->input('last_name');
    $profile->email = $request->input('email');
 
    $user->profile()->save($profile);
