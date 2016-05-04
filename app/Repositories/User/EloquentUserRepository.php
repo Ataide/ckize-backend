@@ -7,13 +7,13 @@ class EloquentUserRepository implements UserRepository
 
 	/**
 	 * Fetch all Ckize users
-	 *
+	 * @param in $userId
 	 *
 	 * @return mixed
 	 */
-	public function findAllUsers()
+	public function findAllUsers($userId)
 	{
-		return User::with(['profile'])->get();
+		return User::with(['profile'])->where('id','!=',$userId)->get();
 	}
 
 	/**

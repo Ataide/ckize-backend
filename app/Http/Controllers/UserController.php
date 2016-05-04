@@ -19,7 +19,7 @@ class UserController extends Controller
     }
 
     public function index(UserRepository $userRepository){
-      return $userRepository->findAllUsers();
+      return $userRepository->findAllUsers($this->user->id);
     }
 
 
