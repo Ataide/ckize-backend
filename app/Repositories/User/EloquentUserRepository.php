@@ -11,7 +11,7 @@ class EloquentUserRepository implements UserRepository
 	 *
 	 * @return mixed
 	 */
-	public function findAllUsers($userId)
+	public function findAllUsers()
 	{
 		return User::with(['profile'])->get();
 	}

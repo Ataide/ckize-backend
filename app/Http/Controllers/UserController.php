@@ -20,8 +20,8 @@ class UserController extends Controller
       $this->currentUser = JWTAuth::toUser($token);
     }
 
-    public function index(UserRepository $userRepository){
-      return $userRepository->findAllUsers($this->currentUser['id']);
+    public function index(){
+      return User::with(['profile'])->where('id','!=',$this->currentUser->id)->get();
     }
 
 
