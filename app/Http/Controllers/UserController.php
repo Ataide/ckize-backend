@@ -23,13 +23,16 @@ class UserController extends Controller
     public function index(){
       $friendsIds = DB::table('friends')->where('requested_id',$this->currentUser->id)->lists('requester_id');
       $users = User::with(['profile'])->where('id','!=',$this->currentUser->id)->get();
-      foreach ($user as $users) {
 
-        if(in_array($user->id,$friendsIds)){
-          $user->isFriend = true;
-        }
+      foreach ($users as $user)
+      {
+        if(in_array($user->id,$friendsIds)) {
+           $user->isFriend = true;
+         }else{
+           $user->isFriend = false;
+         }
+       }
 
-      }
       return $users;
     }
 
