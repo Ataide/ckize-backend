@@ -21,7 +21,7 @@ class UserController extends Controller
     }
 
     public function index(){
-      return User::with(['profile'])->where('id','!=',$this->currentUser->id)->get();
+      return User::with(['profile'])->where('id','!=',1)->get();
     }
 
 
