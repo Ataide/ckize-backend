@@ -62,6 +62,9 @@ class ProfileController extends Controller
       $user->name = Input::get('first_name').' '.Input::get('last_name');
       $profile->display_name = Input::get('first_name').' '.Input::get('last_name');
       $profile->address = $request->input('city').' - '.$request->input('state');
+      $profile->state = Input::get('state');
+      $profile->city = Input::get('city');
+      $profile->phone_number_1 = Input::get('phone_number_1');
       $profile->first_name = Input::get('first_name');
       $profile->last_name = Input::get('last_name');
       $profile->skills = Input::get('skills');
