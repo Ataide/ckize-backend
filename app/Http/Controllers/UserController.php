@@ -21,7 +21,7 @@ class UserController extends Controller
     }
 
     public function index(UserRepository $userRepository){
-      return $userRepository->findAllUsers($this->currentUser->id);
+      return $userRepository->findAllUsers();
     }
 
 
