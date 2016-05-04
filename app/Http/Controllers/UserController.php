@@ -24,10 +24,10 @@ class UserController extends Controller
       $friendsIds = DB::table('friends')->where('requested_id',$this->currentUser->id)->lists('requester_id');
       $users = User::with(['profile'])->where('id','!=',$this->currentUser->id)->get();
       foreach ($user as $users) {
-        
-        if(in_array($user['id'],$friendsIds){
+
+        if(in_array($user->id,$friendsIds)){
           $user->isFriend = true;
-        })
+        }
 
       }
       return $users;
