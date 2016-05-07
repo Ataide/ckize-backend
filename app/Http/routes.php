@@ -17,7 +17,7 @@ Route::get('/', function () {
 });
 
 
-Route::post('/test', 'TestController@store');
+
 
 Route::group(['prefix' => 'api' , 'middleware' => 'cors'], function(){
 
@@ -27,11 +27,10 @@ Route::group(['prefix' => 'api' , 'middleware' => 'cors'], function(){
     return Request::input('message');
   });
 
-
-  Route::resource('authenticate', 'AuthenticateController', ['only' => ['index']]);
+  // Route::resource('authenticate', 'AuthenticateController', ['only' => ['index']]);
   Route::post('authenticate' , 'AuthenticateController@authenticate');
-  Route::get('token', 'AuthenticateController@token');
   Route::post('register' , 'AuthenticateController@register');
+  Route::post('forgot-pass', 'AuthenticateController@reset');
 
   //Prefix /user
   Route::group(['prefix' => 'user'], function(){

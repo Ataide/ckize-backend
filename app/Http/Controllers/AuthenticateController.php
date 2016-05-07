@@ -15,6 +15,7 @@ use App\User;
 use App\Profile;
 use Validator;
 use App\Realtime\Events as SocketClient;
+use Mail;
 
 
 
@@ -28,7 +29,6 @@ class AuthenticateController extends Controller
        // except for the authenticate method. We don't want to prevent
        // the user from retrieving their token if they don't already have it
       //  $this->middleware('jwt.auth', ['only' => ['index', 'teste']]);
-       $this->middleware('jwt.auth', ['only' => ['index', 'teste']]);
        $this->socketClient = new SocketClient;
    }
 
@@ -100,6 +100,29 @@ class AuthenticateController extends Controller
    $user->profile()->save($profile);
 
    return Response::json($user);
+
+ }
+
+ public function reset(Request $request) {
+
+   $validator = Validator::make($request->all(), [
+     'email' => 'required'
+   ]);
+
+   if($validator->fails())
+   {
+     return Response::json(['error' => $validator->errors()->all()]);
+   }
+
+   $email = $request->input('email');
+
+       Mail::raw('Desculpe, no momento estamos implementando essa funcionalidade...', function($message) use ($email)
+        {
+            $message->from('noreply@ckize.com', 'Ckize Application');
+            $message->to($email)->subject('Redefinição de Senha');
+        });
+    return Response::json(['success' => 'email enviado para '.$email]);
+
 
  }
 
