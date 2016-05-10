@@ -37,11 +37,21 @@ class PostController extends Controller
     $post->poster_firstname = $request->input('poster_firstname');
     $post->poster_profile_image = $user->profile()->first()->profile_picture_url;
     $user->posts()->save($post);
-    
     Artisan::call('notify:post', ['token' => $this->token]);
-
     return 'true';
 
+  }
+
+  public function destroy($id) {
+    $user = $this->currentUser;
+    $post = Post::find($id);
+    if($post->user_id == $user->id) {
+      $post->delete();
+      return response()->json(['response' => 'success', 'message' => 'Post deleted']);
+    } else {
+
+      return response()->json(['response' => 'failed', 'message' => 'Something went wrong please try again.']);;
+    }
   }
 
 

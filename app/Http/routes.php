@@ -21,15 +21,15 @@ Route::get('/', function () {
 
 Route::group(['prefix' => 'api' , 'middleware' => 'cors'], function(){
 
-  Route::post('/teste', function(Request $request){
+  Route::post('/teste', function(Request $request) {
     $socketClient = new \App\Realtime\Events;
     $socketClient->test();
     return Request::input('message');
   });
 
   // Route::resource('authenticate', 'AuthenticateController', ['only' => ['index']]);
-  Route::post('authenticate' , 'AuthenticateController@authenticate');
-  Route::post('register' , 'AuthenticateController@register');
+  Route::post('authenticate', 'AuthenticateController@authenticate');
+  Route::post('register', 'AuthenticateController@register');
   Route::post('forgot-pass', 'AuthenticateController@reset');
 
   //Prefix /user
@@ -51,8 +51,9 @@ Route::group(['prefix' => 'api' , 'middleware' => 'cors'], function(){
    /**
    * Posts
    **/
-  Route::get('posts' , 'PostController@index');
+  Route::get('posts', 'PostController@index');
   Route::post('posts', 'PostController@store');
+  Route::delete('posts/{id}', 'PostController@destroy');
 
    /**
    * FriendRequest
