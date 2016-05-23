@@ -49,7 +49,6 @@ class PostController extends Controller
       $post->delete();
       return response()->json(['response' => 'success', 'message' => 'Post deleted']);
     } else {
-
       return response()->json(['response' => 'failed', 'message' => 'Something went wrong please try again.']);;
     }
   }

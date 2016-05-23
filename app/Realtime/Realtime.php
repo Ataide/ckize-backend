@@ -19,13 +19,6 @@ abstract class Realtime
 		$this->socketClient = new Client(new Version1X(env('APP_SOCKET_URL','http://localhost:3000')));
 	}
 
-	public function toDispara($message){
-		$this->socketClient->initialize();
-		$this->socketClient->emit('dispara',['messagem'=>$message]);
-		$this->socketClient->close();
-	}
-
-
 	/**
 	 * Send a websocket broadcast to all connected users.
 	 * @param array $userIds

@@ -115,8 +115,10 @@ class AuthenticateController extends Controller
    }
 
    $email = $request->input('email');
+   $user = User::where('email',$email)->first();
+   $token = JWTAuth::fromUser($user);
 
-       Mail::raw('Desculpe, no momento estamos implementando essa funcionalidade...', function($message) use ($email)
+       Mail::raw('Link de redefinição de senha: '.env('APP_URL').'reset-password/'.$token.'/'.$user->name, function($message) use ($email)
         {
             $message->from('noreply@ckize.com', 'Ckize Application');
             $message->to($email)->subject('Redefinição de Senha');

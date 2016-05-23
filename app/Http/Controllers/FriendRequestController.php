@@ -10,6 +10,7 @@ use App\Repositories\User\UserRepository;
 use App\Repositories\FriendRequest\FriendRequestRepository;
 use App\User as User;
 use JWTAuth;
+use Illuminate\Support\Facades\Artisan;
 
 class FriendRequestController extends Controller
 {
@@ -65,6 +66,9 @@ class FriendRequestController extends Controller
         $friendRequest = new FriendRequest();
         $friendRequest->requester_id = $this->currentUser->id;
         $requestedUser->friendRequests()->save($friendRequest);
+
+
+        Artisan::call('notify:friend_request', ['data' => array('token'=>JWTAuth::getToken(),'userId'=>$request->userId)]);
 
         return response()->json(['response' => 'success', 'message' => 'Friend request submitted']);
 

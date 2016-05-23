@@ -51,7 +51,8 @@ class Events extends Realtime
 	 *
 	 * return void
 	 */
-	public function updateChatListFriendRemoved($userId = "", $clientCode = "", $relatedToId = "", $message = "")
+
+	public function notifyNewFriendRequest($userId = "", $clientCode = "", $relatedToId = "", $message = "")
 	{
 		$this->broadcastTo($userId, $clientCode, $relatedToId, $message);
 	}

@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         Commands\LoginUserNotify::class,
         Commands\PostNotify::class,
+        Commands\FriendRequestNotify::class,
     ];
 
     /**

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\User;
 use Illuminate\Http\Request;
 use App\Repositories\User\UserRepository;
+use Illuminate\Support\Facades\Hash;
 use JWTAuth;
 use App\Http\Requests;
 use Illuminate\Support\Facades\Response;
@@ -19,6 +20,14 @@ class UserController extends Controller
       $this->middleware('jwt.auth');
       $token = JWTAuth::getToken();
       $this->currentUser = JWTAuth::toUser($token);
+    }
+
+    public function reset(Request $request)
+    {
+      $user =$this->currentUser;
+      $user->password = Hash::make($request->input('password'));
+      $user->save();
+      return Response::json(['success' => 'Senha alterada com sucesso.']);
     }
 
     public function index(){

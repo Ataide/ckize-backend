@@ -32,6 +32,7 @@ Route::group(['prefix' => 'api' , 'middleware' => 'cors'], function(){
   Route::post('register', 'AuthenticateController@register');
   Route::post('forgot-pass', 'AuthenticateController@reset');
 
+
   //Prefix /user
   Route::group(['prefix' => 'user'], function(){
     Route::get('profile','ProfileController@getUserProfile');
@@ -46,6 +47,7 @@ Route::group(['prefix' => 'api' , 'middleware' => 'cors'], function(){
     * Posts
     **/
   Route::get('users', 'UserController@index');
+  Route::post('user-pass', 'UserController@reset');
 
 
    /**
